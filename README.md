@@ -1,24 +1,32 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# To run the project
 
-First, run the development server:
+1. This should create a database container with Docker
 
-```bash
+docker compose config
+docker compose up -d db
+
+2. Install needed dependecies:
+
+npm install
+
+3. Set up the database based on provided schema
+
+npx prisma validate
+npx prisma generate
+npx prisma migrate status
+npx prisma migrate deploy
+
+4. Run the server:
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Seeds
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+In folder:
+node-boilerplate\prisma\seeds
+Example admin user seed: npx ts-node usersSeed.ts
 
 ## Learn More
 
