@@ -1,5 +1,9 @@
+import "server-only";
+
 import { prisma } from "@/lib/db";
 import { Prisma } from "@prisma/client";
+import { authenticateUser } from "@/features/auth/authenticate-user";
+import { authenticateUserOrganizationsEdit } from "@/features/auth/authenticate-organization";
 
 export const getAllOrganizations = async () => {
   return await prisma.organizations.findMany();
@@ -15,8 +19,8 @@ export const getOrganizationById = async (id: string) => {
 
 export const createOrganization = async (
   data: Prisma.organizationsCreateInput,
-  ownerUserId: string,
 ) => {
+  const { userId } = await authenticateUser();
   const ownerRole = await prisma.roles.findUnique({
     where: { name: "owner" },
   });
@@ -32,7 +36,7 @@ export const createOrganization = async (
     // Add the owner user to the organization and assign them the owner role
     await tx.mm_users_organizations.create({
       data: {
-        user_id: ownerUserId,
+        user_id: userId,
         organization_id: organization.id,
       },
     });
@@ -40,7 +44,7 @@ export const createOrganization = async (
     // Add the owner role to the user for this organization
     await tx.mm_organizations_users_roles.create({
       data: {
-        user_id: ownerUserId,
+        user_id: userId,
         organization_id: organization.id,
         role_id: ownerRole.id,
       },
@@ -56,9 +60,11 @@ export const updateOrganization = async (
   id: string,
   data: Prisma.organizationsUpdateInput,
 ) => {
+  await authenticateUserOrganizationsEdit(id); // Ensure the user has edit access to the organization
   return await prisma.organizations.update({ where: { id }, data });
 };
 
 export const deleteOrganization = async (id: string) => {
+  await authenticateUserOrganizationsEdit(id); // Ensure the user has edit access to the organization
   return await prisma.organizations.delete({ where: { id } });
 };
