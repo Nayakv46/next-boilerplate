@@ -1,6 +1,7 @@
 import "server-only";
 import { prisma } from "@/lib/db";
 import type { Prisma, role_name } from "@prisma/client";
+import { authenticateUserOrganizationsEdit } from "@/features/auth/authenticate-organization";
 
 const mmUsersOrganizationsInclude = {
   user: {
@@ -72,14 +73,12 @@ export const createMmUsersOrganization = async (
   });
 };
 
-export const updateMmUsersOrganization = async (
-  mmUsersOrganizationsId: string,
-  data: {
-    organization_id: string;
-    user_id: string;
-    role: role_name;
-  },
-) => {
+export const updateMmUsersOrganization = async (data: {
+  organization_id: string;
+  user_id: string;
+  role: role_name;
+}) => {
+  await authenticateUserOrganizationsEdit(data.organization_id); // Ensure the user has edit access to the organization
   try {
     return await prisma.$transaction(async (tx) => {
       // If role is being updated, we need to update the corresponding role in mm_users_organizations_roles
@@ -119,5 +118,6 @@ export const updateMmUsersOrganization = async (
 };
 
 export const deleteMmUsersOrganization = async (id: string) => {
+  await authenticateUserOrganizationsEdit(id); // Ensure the user has edit access to the organization
   return await prisma.mm_users_organizations.delete({ where: { id } });
 };
