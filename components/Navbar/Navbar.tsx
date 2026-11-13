@@ -121,9 +121,12 @@ const Navbar = () => {
               </Link>
               <PopoverWrapper
                 trigger={
-                  <span className="flex p-2.5 bg-popover rounded-full cursor-pointer text-text-gray hover:text-foreground transition">
+                  <button
+                    type="button"
+                    className=" p-2.5 bg-popover rounded-full cursor-pointer text-text-gray hover:text-foreground transition"
+                  >
                     <LuSettings className="w-4 h-4" />
-                  </span>
+                  </button>
                 }
                 description={
                   <div className="flex flex-col ">
