@@ -14,7 +14,7 @@ const PopoverWrapper = ({
   className,
   align = "end",
 }: {
-  trigger: React.ReactNode | string;
+  trigger: React.ReactElement | string;
   title?: React.ReactNode | string;
   description: React.ReactNode | string;
   className?: string;
@@ -22,7 +22,11 @@ const PopoverWrapper = ({
 }) => {
   return (
     <Popover>
-      <PopoverTrigger>{trigger}</PopoverTrigger>
+      {typeof trigger !== "string" ? (
+        <PopoverTrigger render={trigger} nativeButton />
+      ) : (
+        <PopoverTrigger>{trigger}</PopoverTrigger>
+      )}
       <PopoverContent align={align} className={className ?? ""}>
         <PopoverHeader>
           {title ? <PopoverTitle>{title}</PopoverTitle> : null}

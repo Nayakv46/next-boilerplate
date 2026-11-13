@@ -93,8 +93,9 @@ function FormSlider<
                   disabled={disabled}
                   value={[currentValue]}
                   onValueChange={(values) => {
-                    field.onChange(values[0]);
-                    onChange?.(values[0]);
+                    const value = Array.isArray(values) ? values[0] : values;
+                    field.onChange(value);
+                    onChange?.(value);
                   }}
                   onBlur={field.onBlur}
                   className={className}

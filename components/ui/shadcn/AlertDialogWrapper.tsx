@@ -20,7 +20,7 @@ type AlertDialogWrapperProps = {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   onCancel?: React.MouseEventHandler<HTMLButtonElement>;
   // custom trigger element (if provided, it will be used as the trigger)
-  trigger?: React.ReactNode;
+  trigger?: React.ReactElement;
   // convenience props for a built-in trigger button
   triggerButtonProps?: React.ComponentProps<typeof Button> & {
     text?: React.ReactNode;
@@ -54,15 +54,18 @@ const AlertDialogWrapper = ({
   size = "default",
 }: AlertDialogWrapperProps) => {
   const renderTrigger = () => {
-    if (trigger) return <AlertDialogTrigger>{trigger}</AlertDialogTrigger>;
+    if (trigger)
+      return <AlertDialogTrigger render={trigger}></AlertDialogTrigger>;
 
     if (triggerButtonProps)
       return (
-        <AlertDialogTrigger>
-          <Button type="button" {...triggerButtonProps}>
-            {triggerButtonProps.text ?? triggerButtonProps.children}
-          </Button>
-        </AlertDialogTrigger>
+        <AlertDialogTrigger
+          render={
+            <Button type="button" {...triggerButtonProps}>
+              {triggerButtonProps.text ?? triggerButtonProps.children}
+            </Button>
+          }
+        ></AlertDialogTrigger>
       );
 
     return null;
