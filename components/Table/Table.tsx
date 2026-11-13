@@ -72,8 +72,8 @@ export function Table<TData extends RowData>({
   // In grouped mode, top-level rows are group containers.
   // Use leaf rows for the custom table rendering.
   const visibleRows = groupKey
-    ? rows.flatMap((row) => row.getLeafRows())
-    : rows.filter((row) => !row.getIsGrouped());
+    ? rows.flatMap((row) => (row.getIsGrouped() ? row.getLeafRows() : [row]))
+    : rows;
 
   // Calculate total width ratio
   const totalRatio = table
@@ -106,8 +106,7 @@ export function Table<TData extends RowData>({
     const scores = groupRows
       .map((row) => {
         const score = row.getValue<number | string>(gaugeColumn.id);
-        const numericScore =
-          typeof score === "number" ? score : Number(score);
+        const numericScore = typeof score === "number" ? score : Number(score);
         return Number.isFinite(numericScore) ? numericScore : 0;
       })
       .filter((score) => score > 0);
@@ -119,9 +118,7 @@ export function Table<TData extends RowData>({
   // Calculate group information for gauge rendering
   const groupInfo = new Map<string, GroupInfo>();
   visibleRows.forEach((row, index) => {
-    const currentGroup = groupKey
-      ? row.getValue<string>(groupKey)
-      : undefined;
+    const currentGroup = groupKey ? row.getValue<string>(groupKey) : undefined;
     if (currentGroup && groupKey && !groupInfo.has(currentGroup)) {
       const count = visibleRows.filter(
         (r) => r.getValue<string>(groupKey) === currentGroup,
@@ -182,13 +179,9 @@ export function Table<TData extends RowData>({
                 ? row.getValue<string>(groupKey)
                 : undefined;
               const prevGroup =
-                groupKey && prev
-                  ? prev.getValue<string>(groupKey)
-                  : undefined;
+                groupKey && prev ? prev.getValue<string>(groupKey) : undefined;
               const nextGroup =
-                groupKey && next
-                  ? next.getValue<string>(groupKey)
-                  : undefined;
+                groupKey && next ? next.getValue<string>(groupKey) : undefined;
 
               const isStartOfGroup =
                 !groupKey || index === 0 || currentGroup !== prevGroup;
@@ -300,8 +293,7 @@ export function Table<TData extends RowData>({
             const currentGroup = row.getValue<string>(groupKey);
             const prev = visibleRows[index - 1];
             const isStartOfGroup =
-              index === 0 ||
-              currentGroup !== prev?.getValue<string>(groupKey);
+              index === 0 || currentGroup !== prev?.getValue<string>(groupKey);
 
             if (!isStartOfGroup) return null;
 
