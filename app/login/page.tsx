@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/shadcn/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/lib/types/login/login";
 import { showErrorToast, showSuccessToast } from "@/lib/toasts";
-import { POST as login } from "@/app/api/auth/login/route";
+import axios from "../axiosConfig";
 
 const Login = () => {
   const navigateTo = useRouter();
@@ -23,25 +23,33 @@ const Login = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: { email: string; password: string }) => {
     try {
-      const resp = await login(data);
+      const resp = await axios.post("/auth/login", data);
 
       showSuccessToast("Login successful");
-      signIn(data.email);
+
+      signIn(resp.data.user.email);
       navigateTo.push("/");
     } catch (error: any) {
       console.log("err", error);
-      showErrorToast(error.message);
 
-      if (error.status === 422) {
+      const status = error.response?.status;
+      const message = error.response?.data?.message ?? "Something went wrong";
+
+      showErrorToast(message);
+
+      if (status === 422) {
         form.setError("password", {
           type: "manual",
           message: "Invalid email or password",
         });
         form.setFocus("password");
       } else {
-        form.setError("email", { type: "manual", message: error.message });
+        form.setError("email", {
+          type: "manual",
+          message,
+        });
       }
     }
   };
@@ -73,7 +81,7 @@ const Login = () => {
         href="/signup"
         className="text-sm text-blue-500 hover:underline mt-4"
       >
-        Don't have an account? Sign up
+        Don&apos;t have an account? Sign up
       </Link>
     </div>
   );
