@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/shadcn/theme-provider";
 import Navbar from "@/components/Navbar/Navbar";
+import { QueryProvider } from "../providers/QueryProvider";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,10 +28,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <ThemeProvider storageKey="vite-ui-theme">
-          <Navbar />
-          {children}
-        </ThemeProvider>
+        <QueryProvider>
+          <ThemeProvider storageKey="vite-ui-theme">
+            <Navbar />
+            {children}
+          </ThemeProvider>
+        </QueryProvider>
+        <Toaster position="bottom-right" duration={5000} closeButton />
       </body>
     </html>
   );
