@@ -1,3 +1,5 @@
+"server-only";
+
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/db";
@@ -6,8 +8,6 @@ import {
   generateRefreshToken,
   verifyRefreshToken,
 } from "@/features/auth/jwt";
-
-export const runtime = "nodejs";
 
 export async function POST() {
   const cookieStore = await cookies();

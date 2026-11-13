@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import { login } from "@/features/auth/auth.service";
 
-export const runtime = "nodejs";
-
 export async function POST(request: Request) {
   let body: unknown;
 
