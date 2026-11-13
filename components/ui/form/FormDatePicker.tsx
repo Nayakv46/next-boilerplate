@@ -76,31 +76,33 @@ function FormDatePicker<
           <FormControl>
             <div className="relative">
               <Popover>
-                <PopoverTrigger>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    disabled={disabled}
-                    className={cn(
-                      "min-w-40 justify-between text-left font-normal",
-                      !field.value && "text-muted-foreground",
-                      className,
-                    )}
-                    style={
-                      hasError ? { borderColor: "var(--destructive)" } : {}
-                    }
-                  >
-                    {field.value ? (
-                      format(new Date(field.value), "dd.MM.yyyy", {
-                        locale: pl,
-                      })
-                    ) : (
-                      <span>{placeholder}</span>
-                    )}
+                <PopoverTrigger
+                  render={
+                    <Button
+                      type="button"
+                      variant="outline"
+                      disabled={disabled}
+                      className={cn(
+                        "min-w-40 justify-between text-left font-normal",
+                        !field.value && "text-muted-foreground",
+                        className,
+                      )}
+                      style={
+                        hasError ? { borderColor: "var(--destructive)" } : {}
+                      }
+                    >
+                      {field.value ? (
+                        format(new Date(field.value), "dd.MM.yyyy", {
+                          locale: pl,
+                        })
+                      ) : (
+                        <span>{placeholder}</span>
+                      )}
 
-                    <CalendarIcon className="ml-2 h-4 w-4 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
+                      <CalendarIcon className="ml-2 h-4 w-4 opacity-50" />
+                    </Button>
+                  }
+                ></PopoverTrigger>
 
                 <PopoverContent
                   className="min-w-[var(--radix-popover-trigger-width)] p-0"
