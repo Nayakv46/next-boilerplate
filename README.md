@@ -1,5 +1,13 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Tech stack
+
+### TypeScript, Next.js, React, PostgreSQL
+
+Based on my other boilerplate projects
+[React Boilerplate](https://github.com/Nayakv46/react-boilerplate)
+[Node.js Boilerplate](https://github.com/Nayakv46/node-boilerplate)
+
 # To run the project
 
 1. This should create a database container with Docker
@@ -25,7 +33,7 @@ npm run dev
 ## Seeds
 
 In folder:
-node-boilerplate\prisma\seeds
+next-boilerplate\prisma\seeds
 Example admin user seed: npx ts-node usersSeed.ts
 
 ## Learn More
